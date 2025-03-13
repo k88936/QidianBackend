@@ -1,0 +1,42 @@
+[
+  {
+    name: "麻省理工学院",
+    url: "http://www.mit.edu/",
+    departments: "https://www.mit.edu/education/schools-and-departments/",
+    each_department: [
+      {
+        name: "Architecture",
+        url: "https://architecture.mit.edu/",
+        people_url: "https://architecture.mit.edu/people",
+        people: [
+          {
+            name: "Ryan Aasen",
+            url: "https://architecture.mit.edu/people/ryan-aasen",
+            none_mentor: true,
+          },
+          {
+            name: "Cherie Abbanat",
+            url: "https://architecture.mit.edu/people/cherie-abbanat",
+            none_mentor: true,
+          },
+          {
+            name: "Bolurin Adedipe",
+            url: "https://architecture.mit.edu/people/bolurin-adedipe",
+            none_mentor: true,
+          },
+          {
+            name: "Xavi L. Aguirre",
+            url: "https://architecture.mit.edu/people/xavi-l-aguirre",
+            introduction: "Xavi Laida Aguirre [SHAH-bee] is an Assistant Professor of Architecture at the Massachusetts Institute of Technology and Founder/Director of the award winning architectural design practice stock-a-studio. \n\nAt MIT, they are the Director of DIS-ASSEMBLIES LAB where their work focuses on learning from and designing for when architectures come apart. Through building (and unbuilding) projects, product development and research, they consider our relationship to material and commodity circulations, both technically as well as culturally.\n\nAguirre’s work has been commissioned by the Carnegie Museum of Art, the Industry Opera Company, Dartmouth College, MOCA Geffen, Superblue Miami, Design Core Detroit, Berghain Club, Materials & Applications, Queer Pile Up, Salone del Mobile Milan, Oya Music Festival and Berlin Art. Their research has been published in e-flux, Pin-up magazine, Gradient Journal and Art Papers and has been profiled by the New Yorker. They hold a B.A. from Northeastern University in Political Science and a Master’s of Architecture from California State Polytechnic Pomona. \n\nThey were one of the representatives for the US Pavilion at the 2023 Venice Architecture Biennale, the recipient of the 2022 Architectural League Prize and the 2018 Muschenheim Design Fellowship among other awards. \n\nThey are currently designing ‘The warehouse’, an experimental music and performance space at Dartmouth College in collaboration with T+E+A+M, installing several large scale museum installations and developing someparts: a perpetually transformable architectural kit-of-parts product.",
+            info: {
+              "research-direction": [
+                "learning from and designing for when architectures come apart 建筑物解体时的学习与设计",
+                "considering our relationship to material and commodity circulations, both technically as well as culturally 考虑我们与材料和技术文化流通的关系",
+              ],
+            },
+          },
+        ]
+      }
+    ]
+  }
+]
