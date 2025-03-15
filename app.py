@@ -10,10 +10,12 @@ import pymysql
 # 导入CORS库
 from flask_cors import CORS
 from whoosh.qparser import QueryParser
+
 ix = open_dir("index")
 app = Flask(__name__)
 # 配置CORS，允许所有来源的请求
 CORS(app)
+
 
 # 封装SQL语句函数
 def func(sql, m='r'):
@@ -36,6 +38,9 @@ def func(sql, m='r'):
     return data
 
 
+result_count_limit = 100
+
+
 @app.route("/search", methods=['GET'])
 def search():
     print('>>> search request')
@@ -46,28 +51,44 @@ def search():
     page = int(request.args.get("page", 0))
     per_page_count = 10
 
-
-
     # 在搜索时应用分页
-    with ix.searcher() as searcher:# 使用QueryParser来解析查询
+    with ix.searcher() as searcher:
+        # 使用QueryParser来解析查询
         qp = QueryParser("info", ix.schema)
         q = qp.parse(query)
         start_time = time.time()  # 记录开始时间
-        docs = searcher.search_page(q, pagelen=per_page_count, pagenum=page)
+
+        # 获取总结果数
+        docs = searcher.search(q, limit=result_count_limit)  # 限制最大结果数为100
+        total_results = min(len(docs), result_count_limit)
+
+        # 获取分页结果
+        # docs = searcher.search_page(q, pagelen=per_page_count, pagenum=page)
         end_time = time.time()  # 记录结束时间
         spend = end_time - start_time  # 计算搜索时间
         abstracts = []
-
         for doc in docs:
-            print("whoosh result:",doc)
+            print("whoosh result:", doc)
             tech_id = doc['tech_id']
-            sql = "select teacher, department, school,info from tech_info where TechID = " + str(tech_id) + ";"
+            sql = "select teacher, department, school,fields,email,page from tech_info where TechID = " + str(
+                tech_id) + ";"
             ab = func(sql)
-            print("dataBase result:",ab)
+            print("dataBase result:", ab)
             if ab:
-                temp={'tech_id': tech_id, 'teacher': ab[0]['teacher'], 'department': ab[0]['department'], 'info': ab[0]['info']}
+                temp = {
+                    "tech_id": tech_id,
+                    "teacher": ab[0]['teacher'],
+                    "department": ab[0]['department'],
+                    # "introduction": ab[0]['introduction'],
+                    "school": ab[0]['school'],
+                    "fields": ab[0]['fields'],
+                    "email": ab[0]['email'],
+                    "page": ab[0]['page'],
+                    "info": doc['info']
+                }
                 abstracts.append(temp)
-    return jsonify({"docs": abstracts,"count":100, "spend": spend})
+        print("count: ", total_results)
+    return jsonify({"docs": abstracts, "spend": spend, "count": total_results})
 
 
 @app.route('/detail')
@@ -83,4 +104,4 @@ def detail():
 
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=5073, debug=True)

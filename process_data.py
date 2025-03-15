@@ -38,10 +38,12 @@ createUserSql = '''CREATE TABLE tech_info
            department                VARCHAR(100)  , 
            teacher                 VARCHAR(100)   ,
            introduction                TEXT, 
-           info                           VARCHAR(999)
+           fields                          TEXT,
+           email                    VARCHAR(999),
+           page                     VARCHAR(999)
            )
 '''
-sql_insert = 'insert into tech_info (TechID,school, department,teacher,introduction,info) values {}'
+sql_insert = 'insert into tech_info (TechID,school, department,teacher,introduction,fields,email,page) values {}'
 uuid = 1  # 修改: uuid 从 1 开始
 print("start")
 try:
@@ -83,7 +85,17 @@ for school in data:
                 continue
             if 'research-direction' not in person['info']:
                 continue
-            x = [uuid, school_name, department_name, person_name, person['introduction'], 'empty']
+
+            research_direction = person['info']['research-direction']
+            if isinstance(research_direction, list):
+                research_direction_str = '#'.join(research_direction)
+            else:
+                research_direction_str = research_direction
+            email_addr = person['info']['email'] if 'email' in person['info'] else ''
+            page_addr = person['info']['page'] if 'page' in person['info'] else person['url']
+
+            x = [uuid, school_name, department_name, person_name, person['introduction'], research_direction_str,
+                 email_addr, page_addr]
             print("           ====")
             print('           ', person)
             print("           *****")
@@ -96,13 +108,7 @@ for school in data:
                 my_connection.rollback()
                 exit(2)
             try:
-                research_direction = person['info']['research-direction']
-                if isinstance(research_direction, list):
-                    research_direction_str = ' '.join(research_direction)
-                else:
-                    research_direction_str = research_direction
-
-                info = ' '.join([school_name, department_name, person_name, research_direction_str])
+                info = '#'.join([school_name, department_name, person_name, research_direction_str])
                 print(info)
                 write.add_document(tech_id=str(uuid),
                                    # school=school_name,
