@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@author: Administrator
-"""
 import os
 import json5  # 修改: 使用 json5 库
 import pymysql
