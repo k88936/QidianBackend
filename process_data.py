@@ -5,6 +5,7 @@ import pymysql
 from whoosh.index import create_in
 from whoosh.fields import Schema, TEXT, NGRAM, ID
 from jieba.analyse import ChineseAnalyzer
+from db_config import DB_CONFIG  # 导入数据库配置
 
 analyzer = ChineseAnalyzer()
 schema = Schema(tech_id=ID(stored=True, analyzer=analyzer),
@@ -44,12 +45,7 @@ sql_insert = 'insert into tech_info (TechID,school, department,teacher,introduct
 uuid = 1  # 修改: uuid 从 1 开始
 print("start")
 try:
-    my_connection = pymysql.connect(user="root",
-                                    password="root",
-                                    port=3306,
-                                    host="127.0.0.1",  # 本地数据库  等同于localhost
-                                    db="school",
-                                    charset="utf8")
+    my_connection = pymysql.connect(**DB_CONFIG)  # 使用配置文件中的配置
     cursor = my_connection.cursor()
 
 except Exception as e:

@@ -10,6 +10,7 @@ import pymysql
 # 导入CORS库
 from flask_cors import CORS
 from whoosh.qparser import QueryParser
+from db_config import DB_CONFIG  # 导入数据库配置
 
 ix = open_dir("index")
 app = Flask(__name__)
@@ -19,7 +20,7 @@ CORS(app)
 
 # 封装SQL语句函数
 def func(sql, m='r'):
-    py = pymysql.connect(host="127.0.0.1", user="root", passwd='root', db='school')
+    py = pymysql.connect(**DB_CONFIG)  # 使用配置文件中的配置
     cursor = py.cursor()
     data = False
     try:
