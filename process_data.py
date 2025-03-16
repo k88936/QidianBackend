@@ -20,7 +20,13 @@ if not os.path.exists("index"):
     os.mkdir("index")
 ix = create_in("index", schema)
 write = ix.writer()
+try:
+    my_connection = pymysql.connect(**DB_CONFIG)  # 使用配置文件中的配置
+    cursor = my_connection.cursor()
 
+except Exception as e:
+    print("\033[91mMysql link fail：%s\033[0m" % e)  # 修改: 红色打印
+    exit(1)
 # --------------------------------------------------------------------------
 # 读取本地的data.json文件  在数据库中建一个tech_info表   将data.json内容插入到数据库中
 # --------------------------------------------------------------------------
@@ -44,19 +50,12 @@ createUserSql = '''CREATE TABLE tech_info
 sql_insert = 'insert into tech_info (TechID,school, department,teacher,introduction,fields,email,page) values {}'
 uuid = 1  # 修改: uuid 从 1 开始
 print("start")
-try:
-    my_connection = pymysql.connect(**DB_CONFIG)  # 使用配置文件中的配置
-    cursor = my_connection.cursor()
 
-except Exception as e:
-    print("\033[91mMysql link fail：%s\033[0m" % e)  # 修改: 红色打印
-    exit(1)
 try:
     cursor.execute("drop table if exists tech_info")
     cursor.execute(createUserSql)
 except Exception as e:
     print("\033[91mdont do created table sql: %s\033[0m" % e)  # 修改: 红色打印
-
 for school in data:
     school_name = school['name']
     print(">>> school_name:", school_name)
