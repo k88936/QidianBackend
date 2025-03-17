@@ -48,8 +48,10 @@ except Exception as e:
 cursor.execute("select TechID,school,department,teacher,fields from tech_info")
 for row in cursor.fetchall():
     url, school_name, department_name, person_name, fields = row
+    print("record: school",school_name)
+    print("        department",department_name)
+    print("        fields:",fields)
     info = school_name +' '+department_name+ ' '+fields.replace('#', '')
-    print("record: ",info)
     write.add_document(tech_id=url,
                        # school=school_name,
                        # department=department_name,
