@@ -52,6 +52,16 @@ def search():
     page = int(request.args.get("page", 0))
     per_page_count = 10
 
+    # 获取过滤参数
+    filters = request.args.get('filters')
+    filter_conditions = None
+    if filters:
+        filters = eval(filters)  # 将字符串转换为字典
+        if 'nation' in filters:
+            from whoosh.query import Term, Or
+            nations = filters['nation']
+            filter_conditions = Or([Term('school_nation', nation) for nation in nations])
+
     # 在搜索时应用分页
     with ix.searcher() as searcher:
         # 使用QueryParser来解析查询
@@ -60,7 +70,7 @@ def search():
         start_time = time.time()  # 记录开始时间
 
         # 获取总结果数
-        docs = searcher.search(q, limit=result_count_limit)  # 限制最大结果数为100
+        docs = searcher.search(q, limit=result_count_limit, filter=filter_conditions)  # 应用过滤器
         total_results = min(len(docs), result_count_limit)
 
         # 获取分页结果

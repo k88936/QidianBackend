@@ -12,6 +12,7 @@ schema = Schema(tech_id=TEXT(stored=True),
                 # school=TEXT(stored=True, analyzer=analyzer),
                 # teacher=TEXT(stored=True),
                 # introduction=TEXT(stored=True, analyzer=analyzer),
+                school_nation=TEXT(stored=True, analyzer=analyzer),
                 info=TEXT(stored=True, analyzer=analyzer),
                 )
 
@@ -45,9 +46,9 @@ except Exception as e:
     print("\033[91mMysql link fail：%s\033[0m" % e)  # 修改: 红色打印
     exit(1)
 
-cursor.execute("select TechID,school,department,teacher,fields from tech_info")
+cursor.execute("select TechID,school,school_nation,department,teacher,fields from tech_info")
 for row in cursor.fetchall():
-    url, school_name, department_name, person_name, fields = row
+    url, school_name,school_nation, department_name, person_name, fields = row
     print("record: school",school_name)
     print("        department",department_name)
     print("        fields:",fields)
@@ -57,6 +58,7 @@ for row in cursor.fetchall():
                        # department=department_name,
                        # teacher=person_name,
                        # introduction=person['introduction']
+                       school_nation=school_nation,
                        info=info
                        )
 my_connection.commit()
